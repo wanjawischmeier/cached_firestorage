@@ -35,37 +35,34 @@ class RemotePicture extends StatelessWidget {
         storageKey: storageKey,
         mapKey: mapKey,
       ),
-      builder: (_, snapshot) => snapshot.connectionState ==
-              ConnectionState.waiting
-          ? const Center(
-              child: !kIsWeb ? AdaptiveSpinner() : CircularProgressIndicator(),
-            )
-          : useAvatarView
-              ? AvatarView(
-                  radius: avatarViewRadius!,
-                  avatarType: AvatarType.CIRCLE,
-                  imagePath:
-                      snapshot.data != "" ? snapshot.data! : placeholder!,
-                  placeHolder: const Center(
-                    child: !kIsWeb
-                        ? AdaptiveSpinner()
-                        : CircularProgressIndicator(),
-                  ),
-                  errorWidget:
-                      placeholder != null ? Image.asset(placeholder!) : null,
+      builder: (_, snapshot) =>
+          snapshot.connectionState == ConnectionState.waiting
+              ? const Center(
+                  child: CircularProgressIndicator(),
                 )
-              : CachedNetworkImage(
-                  imageUrl: snapshot.data!,
-                  placeholder: (_, __) => const Center(
-                    child: !kIsWeb
-                        ? AdaptiveSpinner()
-                        : CircularProgressIndicator(),
-                  ),
-                  errorWidget: placeholder != null
-                      ? (_, __, ___) => Image.asset(placeholder!)
-                      : null,
-                  fit: fit,
-                ),
+              : useAvatarView
+                  ? AvatarView(
+                      radius: avatarViewRadius!,
+                      avatarType: AvatarType.CIRCLE,
+                      imagePath:
+                          snapshot.data != "" ? snapshot.data! : placeholder!,
+                      placeHolder: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: placeholder != null
+                          ? Image.asset(placeholder!)
+                          : null,
+                    )
+                  : CachedNetworkImage(
+                      imageUrl: snapshot.data!,
+                      placeholder: (_, __) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: placeholder != null
+                          ? (_, __, ___) => Image.asset(placeholder!)
+                          : null,
+                      fit: fit,
+                    ),
     );
   }
 }
