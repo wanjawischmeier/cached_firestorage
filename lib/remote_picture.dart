@@ -11,8 +11,10 @@ class RemotePicture extends StatelessWidget {
   final String? placeholder;
   final double? avatarViewRadius;
   final BoxFit? fit;
+  final Widget loadingIndicator;
 
   const RemotePicture({
+    Key? key,
     required this.imagePath,
     required this.mapKey,
     this.storageKey,
@@ -20,7 +22,9 @@ class RemotePicture extends StatelessWidget {
     this.placeholder,
     this.avatarViewRadius,
     this.fit,
-    Key? key,
+    this.loadingIndicator = const Center(
+      child: CircularProgressIndicator(),
+    ),
   }) : super(key: key);
 
   @override
@@ -35,27 +39,21 @@ class RemotePicture extends StatelessWidget {
       ),
       builder: (_, snapshot) =>
           snapshot.connectionState == ConnectionState.waiting
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? loadingIndicator
               : useAvatarView
                   ? AvatarView(
                       radius: avatarViewRadius!,
                       avatarType: AvatarType.CIRCLE,
                       imagePath:
                           snapshot.data != "" ? snapshot.data! : placeholder!,
-                      placeHolder: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      placeHolder: loadingIndicator,
                       errorWidget: placeholder != null
                           ? Image.asset(placeholder!)
                           : null,
                     )
                   : CachedNetworkImage(
                       imageUrl: snapshot.data!,
-                      placeholder: (_, __) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      placeholder: (_, __) => loadingIndicator,
                       errorWidget: placeholder != null
                           ? (_, __, ___) => Image.asset(placeholder!)
                           : null,
