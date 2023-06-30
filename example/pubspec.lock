@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  adaptive_spinner:
-    dependency: transitive
-    description:
-      name: adaptive_spinner
-      sha256: db4dfd3289becf90af27a374bcfb4edac61fdfedf7b11fea175ae6925e6cd34a
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   async:
     dependency: transitive
     description:
@@ -47,7 +39,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.7"
+    version: "0.1.8"
   cached_network_image:
     dependency: transitive
     description:
@@ -221,14 +213,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  flutter_spinkit:
-    dependency: transitive
-    description:
-      name: flutter_spinkit
-      sha256: "77a2117c0517ff909221f3160b8eb20052ab5216107581168af574ac1f05dff8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

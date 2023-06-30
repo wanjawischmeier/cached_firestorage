@@ -133,9 +133,9 @@ class _HomePageState extends State<HomePage> {
               'in Firebase Storage',
               textAlign: TextAlign.center,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 SizedBox(
                   height: 100,
                   child: RemotePicture(
@@ -150,9 +150,9 @@ class _HomePageState extends State<HomePage> {
               'You can also use it for an avatar',
               textAlign: TextAlign.center,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 RemotePicture(
                   imagePath: 'avatar.jpeg',
                   mapKey: 'avatar',
