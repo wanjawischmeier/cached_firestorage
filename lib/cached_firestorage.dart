@@ -6,24 +6,31 @@ import 'package:get_storage/get_storage.dart';
 /// It natively implements a low dependencies cache to save time and computational costs.
 ///
 class CachedFirestorage {
-  static CachedFirestorage? _instance;
+  static late GetStorage _storageInstance;
+  static late CachedFirestorage instance;
   Map<String, String> _storageKeys = {'default': 'default'};
   int cacheTimeout;
 
   CachedFirestorage._(this.cacheTimeout);
 
-  /// Get the singleton instance
-  static CachedFirestorage get instance =>
-      _instance ??= CachedFirestorage._(360);
+  Future<void> init() async {
+    await GetStorage.init();
+    _storageInstance = GetStorage();
+    instance = CachedFirestorage._(360);
+  }
 
   /// Sets the storage keys
   void setStorageKeys(Map<String, String> keys) {
-    assert(!keys.keys.contains('default'), 'The default key is automatically set');
+    assert(
+      !keys.keys.contains('default'),
+      'The default key is automatically set',
+    );
     _storageKeys = {..._storageKeys, ...keys};
   }
 
   /// Private method
-  Future<String> _getDownloadURL(String filePath, {
+  Future<String> _getDownloadURL(
+    String filePath, {
     String? fallbackFilePath,
   }) async {
     try {
@@ -53,15 +60,14 @@ class CachedFirestorage {
     assert(storageKey == null || _storageKeys.containsKey(storageKey));
 
     final Map<String, dynamic> mapDownloadURLs =
-        GetStorage().read(_storageKeys[storageKey ?? 'default']!) ?? {};
+        _storageInstance.read(_storageKeys[storageKey ?? 'default']!) ?? {};
     final DateTime now = DateTime.now();
 
     if (mapDownloadURLs[mapKey] != null) {
-      final DateTime lastWrite =
-      DateTime.parse(mapDownloadURLs[mapKey]['lastWrite']);
-      final int difference = now
-          .difference(lastWrite)
-          .inMinutes;
+      final DateTime lastWrite = DateTime.parse(
+        mapDownloadURLs[mapKey]['lastWrite'],
+      );
+      final int difference = now.difference(lastWrite).inMinutes;
       if (difference < cacheTimeout) {
         return mapDownloadURLs[mapKey]['value'];
       }
@@ -77,7 +83,10 @@ class CachedFirestorage {
       'lastWrite': now.toIso8601String(),
     };
 
-    GetStorage().write(_storageKeys[storageKey ?? 'default']!, mapDownloadURLs);
+    _storageInstance.write(
+      _storageKeys[storageKey ?? 'default']!,
+      mapDownloadURLs,
+    );
 
     return downloadURL;
   }
@@ -88,12 +97,14 @@ class CachedFirestorage {
     String? storageKey,
   }) {
     final Map<String, dynamic> mapDownloadURLs =
-        GetStorage().read(_storageKeys[storageKey ?? 'default']!) ?? {};
+        _storageInstance.read(_storageKeys[storageKey ?? 'default']!) ?? {};
 
     if (mapDownloadURLs[mapKey] != null) {
       mapDownloadURLs.remove(mapKey);
-      GetStorage()
-          .write(_storageKeys[storageKey ?? 'default']!, mapDownloadURLs);
+      _storageInstance.write(
+        _storageKeys[storageKey ?? 'default']!,
+        mapDownloadURLs,
+      );
     }
   }
 }
