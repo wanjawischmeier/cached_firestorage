@@ -13,7 +13,7 @@ class CachedFirestorage {
 
   CachedFirestorage._(this.cacheTimeout);
 
-  Future<void> init() async {
+  static Future<void> init() async {
     await GetStorage.init();
     _storageInstance = GetStorage();
     instance = CachedFirestorage._(360);
